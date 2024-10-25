@@ -106,6 +106,7 @@ type ycsb struct {
 	minScanLength, maxScanLength                            uint64
 	readFreq, scanFreq                                      float32
 	insertFreq, updateFreq, readModifyWriteFreq, deleteFreq float32
+	customZipfian																						float64
 }
 
 func init() {
@@ -152,6 +153,7 @@ var ycsbMeta = workload.Meta{
 		g.flags.Float32Var(&g.scanFreq, `scan-freq`, 0.0, `Percentage of scans in the workload. Used in conjunction with --workload=CUSTOM to specify an alternative workload mix. (default 0.0)`)
 		g.flags.Float32Var(&g.readModifyWriteFreq, `read-modify-write-freq`, 0.0, `Percentage of read-modify-writes in the workload. Used in conjunction with --workload=CUSTOM to specify an alternative workload mix. (default 0.0)`)
 		g.flags.Float32Var(&g.deleteFreq, `delete-freq`, 0.0, `Percentage of deletes in the workload. Used in conjunction with --workload=CUSTOM to specify an alternative workload mix. (default 0.0)`)
+		g.flags.Float64Var(&g.customZipfian, `zipfian`, 0.99, `Custom zipfian for efficient testing. (default 0.99)`)
 		RandomSeed.AddFlag(&g.flags)
 
 		// TODO(dan): g.flags.Uint64Var(&g.maxWrites, `max-writes`,
