@@ -1,3 +1,5 @@
+import fmt
+
 // Copyright 2017 The Cockroach Authors.
 //
 // Use of this software is governed by the CockroachDB Software License
@@ -110,6 +112,7 @@ type ycsb struct {
 }
 
 func init() {
+	fmt.Println("IM PRINTING SOMETHING BIG SO WE CAN SEE")
 	workload.Register(ycsbMeta)
 }
 
