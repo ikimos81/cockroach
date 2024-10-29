@@ -9,7 +9,7 @@ go_library(
         "ycsb.go",
         "zipfgenerator.go",
     ],
-    importpath = "github.com/ikimos81/cockroach/pkg/workload/ycsb",
+    importpath = "github.com/cockroachdb/cockroach/pkg/workload/ycsb",
     visibility = ["//visibility:public"],
     deps = [
         "//pkg/col/coldata",
