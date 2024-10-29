@@ -14,7 +14,7 @@ go_library(
         "stats.go",
         "workload.go",
     ],
-    importpath = "github.com/ikimos81/cockroach/pkg/workload",
+    importpath = "github.com/cockroachdb/cockroach/pkg/workload",
     visibility = ["//visibility:public"],
     deps = [
         "//pkg/col/coldata",
