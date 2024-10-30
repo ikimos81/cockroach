@@ -1375,7 +1375,7 @@ Use "cockroach [command] --help" for more information about a command.
 	// Strangely, 'cockroach --help' does, as well as usage error messages.
 	helpExpected1 := commandPrefix + expUsage
 	helpExpected2 := strings.ReplaceAll(helpExpected1, "      --version                            version for cockroach\n", "")
-	badFlagExpected := fmt.Sprintf("%s\nError: unknown flag: --foo\n", expUsage)
+	badFlagExpected := fmt.Sprintf("%s\nError (IS THIS THE ERROR???): unknown flag: --foo\n", expUsage)
 
 	testCases := []struct {
 		flags         []string
