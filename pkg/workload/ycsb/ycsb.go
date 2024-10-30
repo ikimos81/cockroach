@@ -110,7 +110,6 @@ type ycsb struct {
 }
 
 func init() {
-	fmt.Println("IM PRINTING SOMETHING BIG SO WE CAN SEE")
 	workload.Register(ycsbMeta)
 }
 
