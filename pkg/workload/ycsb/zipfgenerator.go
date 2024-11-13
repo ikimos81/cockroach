@@ -12,6 +12,7 @@ package ycsb
 import (
 	"fmt"
 	"math"
+	"flags"
 
 	"github.com/cockroachdb/cockroach/pkg/util/syncutil"
 	"github.com/cockroachdb/errors"
@@ -21,9 +22,16 @@ import (
 const (
 	// See https://github.com/brianfrankcooper/YCSB/blob/f886c1e7988f8f4965cb88a1fe2f6bad2c61b56d/core/src/main/java/com/yahoo/ycsb/generator/ScrambledZipfianGenerator.java#L33-L35
 	defaultIMax  = 10000000000
-	defaultTheta = 0.99
+	//defaultTheta = 0.99
 	defaultZetaN = 26.46902820178302
 )
+
+var defaultTheta float64
+
+func init() {
+	flag.Parse()
+	defaultTheta=flags.zipfian
+}
 
 // ZipfGenerator is a random number generator that generates draws from a Zipf
 // distribution. Unlike rand.Zipf, this generator supports incrementing the
