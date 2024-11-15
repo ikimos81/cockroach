@@ -217,10 +217,6 @@ func (g *ycsb) Hooks() workload.Hooks {
 				defaultReqDist = "zipfian"
 			case "CUSTOM":
 				defaultReqDist = "zipfian"
-			case "X":
-				defaultReqDist= "zipfian"
-				g.readFreq = g.readFrac
-				g.updateFreq = 1-g.readFreq
 			default:
 				return errors.Errorf("Unknown workload: %q", g.workload)
 			}
