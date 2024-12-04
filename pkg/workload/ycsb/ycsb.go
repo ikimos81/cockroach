@@ -107,6 +107,7 @@ type ycsb struct {
 	readFreq, scanFreq                                      float32
 	insertFreq, updateFreq, readModifyWriteFreq, deleteFreq float32
 	zipfian, readFrac																				float64
+	fieldLen																								int
 }
 
 func init() {
@@ -155,6 +156,7 @@ var ycsbMeta = workload.Meta{
 		g.flags.Float32Var(&g.deleteFreq, `delete-freq`, 0.0, `Percentage of deletes in the workload. Used in conjunction with --workload=CUSTOM to specify an alternative workload mix. (default 0.0)`)
 		g.flags.Float64Var(&g.zipfian, `zipfian`, 0.99, `Custom zipfian for efficient testing. (default 0.99)`)
 		g.flags.Float64Var(&g.readFrac, `read-frac`, 0.95, `Fraction of reads in workload X`)
+		g.flags.IntVar(&g.fieldLen, `field-len`, 100, `Length of fields in SQL database`)
 		RandomSeed.AddFlag(&g.flags)
 
 		// TODO(dan): g.flags.Uint64Var(&g.maxWrites, `max-writes`,
@@ -385,7 +387,7 @@ func (g *ycsb) Tables() []workload.Table {
 				}
 				rng := rand.NewSource(RandomSeed.Seed() + uint64(batchIdx))
 
-				var tmpbuf [fieldLength]byte
+				var tmpbuf [g.fieldLen]byte
 				for rowIdx := rowBegin; rowIdx < rowEnd; rowIdx++ {
 					rowOffset := rowIdx - rowBegin
 
@@ -798,7 +800,7 @@ func (yw *ycsbWorker) insertRow(ctx context.Context) error {
 	keyIndex := yw.nextInsertKeyIndex()
 	args[0] = yw.buildKeyName(keyIndex)
 	for i := 1; i <= numTableFields; i++ {
-		args[i] = yw.randString(fieldLength)
+		args[i] = yw.randString(g.fieldLen)
 	}
 	if _, err := yw.conn.Exec(ctx, yw.insertStmt, args[:]...); err != nil {
 		var pgErr *pgconn.PgError
@@ -829,7 +831,7 @@ func (yw *ycsbWorker) updateRow(ctx context.Context) error {
 	var args [2]interface{}
 	args[0] = yw.nextReadKey()
 	fieldIdx := yw.rng.Intn(numTableFields)
-	value := yw.randString(fieldLength)
+	value := yw.randString(g.fieldLen)
 	if yw.config.json {
 		stmt = yw.updateStmts[0]
 		args[1] = fmt.Sprintf(`{"field%d": "%s"}`, fieldIdx, value)
@@ -919,7 +921,7 @@ func (yw *ycsbWorker) readModifyWriteRow(ctx context.Context) error {
 		}
 		// Modify.
 		_ = oldValue
-		newValue := yw.randString(fieldLength)
+		newValue := yw.randString(g.fieldLen)
 		// Write.
 		var updateStmt stmtKey
 		var args [2]interface{}
